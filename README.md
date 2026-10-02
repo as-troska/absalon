@@ -39,6 +39,10 @@ Dei historiske bileta (utsnitt av Scholeus-prospektet av Bergen, kring 1580) lig
 ./hent-bilete.sh
 ```
 
+## Om tekstane
+
+Dei moderne tekstane er laga ved hjelp av KI (Claude) og byggjer på originalteksten til Absalon. Dei kan innehalde feil. Sjekk originalen om noko er viktig, og meld gjerne frå om feil i [Issues](https://github.com/as-troska/absalon/issues).
+
 ## Kjelder
 
 - Absalon Pederssøn Beyer: dagboka (Bergens Kapitelsbog 1552–1572) og *Om Norgis Rige* (1567). [Heile dagboka hos Bokselskap](https://www.bokselskap.no/boker/absalonsdagbok/1552-2)
@@ -47,7 +51,7 @@ Dei historiske bileta (utsnitt av Scholeus-prospektet av Bergen, kring 1580) lig
 
 ## Lisens
 
-- **Kjeldekode:** MIT, sjå [LICENSE](LICENSE).
-- **Eigne tekstar** (omsetjingar, ordlister, oppgåver og innleiing): [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.no).
+- **Kjeldekode:** MIT, sjå [LICENSE](LICENSE). Koden er òg skriven med hjelp frå Claude.
+- **Omsetjingar, ordlister, oppgåver og innleiing** er generert med Claude (Anthropic) og gjennomgått av meg. Eg krev ingen rettar til dei, og dei er frigjevne under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.no).
 - **Absalon sine originaltekstar** og **Scholeus-prospektet** er falne i det fri (public domain).
 - **Kartdata:** © OpenStreetMap-bidragsytarar, [ODbL](https://www.openstreetmap.org/copyright).
