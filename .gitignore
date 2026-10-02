@@ -5,3 +5,6 @@ Thumbs.db
 .vscode/
 .idea/
 .claude/settings.local.json
+
+# Kjeldetekstar med uavklart lisens
+kjelder/
