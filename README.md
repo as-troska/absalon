@@ -4,12 +4,13 @@ Ei GPS-vandring gjennom Bergen med dagboka til Absalon Pederssøn Beyer (1528–
 
 **Live:** <https://absalon.sneaas.no>
 
-Elevane går mellom sju postar i sentrum. Når dei er framme, dukkar ein tekst frå dagboka opp, med originalteksten frå 1500-talet, ei omsetjing til moderne nynorsk, ei ordliste og ei oppgåve (film eller bilete) som skal løysast på staden.
+Elevane går mellom åtte postar i sentrum. Når dei er framme, dukkar ein tekst frå dagboka opp, med originalteksten frå 1500-talet, ei omsetjing til moderne nynorsk, ei ordliste og ei oppgåve (film eller bilete) som skal løysast på staden.
 
 | Post | Tema |
 |---|---|
 | Lepramuseet | St. Jørgens hospital og «Spitalen» |
 | Domkyrkja | Domkyrkja og Latinskolen |
+| Korskyrkja | Bråk i prestegarden, 1563 |
 | Torget | Hamn og handel, Martinskyrkja |
 | Strandkaien | Bybrannen i 1561 |
 | Nykirken | Erkebispegarden og lagtinget |

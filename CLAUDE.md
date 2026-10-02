@@ -50,7 +50,3 @@ Intro, omsetjingar, ordlister og oppgåver er **skrivne av Claude, ikkje av bruk
 ## Postane så langt
 
 lepra (Lepramuseet), dom (Domkyrkja), kors (Korskyrkja, testpost lagd 2026-10-02), torget, brann (Strandkaien), nykirken, bryggen, bergenhus.
-
-## Kjende opne saker
-
-- nginx serverer `.git/` offentleg (`/.git/config` gjev 200). Brukaren må leggje til `location ~ /\.(?!well-known) { deny all; }` i `/etc/nginx/sites-available/absalon.sneaas.no`. Claude har ikkje sudo.
