@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="nn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Absalon sitt Bergen</title>
+<meta name="description" content="Ei vandring gjennom Bergen med dagboka til Absalon Pederssøn Beyer frå 1500-talet. Sju postar med originaltekst, moderne nynorsk og oppgåver.">
+<meta name="theme-color" content="#1a5aa6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231a5aa6'/%3E%3Crect x='10' y='10' width='44' height='44' rx='4' fill='%23fff'/%3E%3Ctext x='32' y='45' font-size='34' text-anchor='middle' font-family='Arial,sans-serif' fill='%23111820'%3E%E2%8C%98%3C/text%3E%3C/svg%3E">
+<link rel="canonical" href="https://absalon.sneaas.no/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Absalon sitt Bergen">
+<meta property="og:title" content="Absalon sitt Bergen">
+<meta property="og:description" content="Ei vandring gjennom Bergen med dagboka til Absalon Pederssøn Beyer frå 1500-talet. Sju postar med originaltekst, moderne nynorsk og oppgåver.">
+<meta property="og:url" content="https://absalon.sneaas.no/">
+<meta property="og:locale" content="nn_NO">
+<meta property="og:image" content="https://absalon.sneaas.no/bilete/scholeus.jpg">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1295">
+<meta property="og:image:alt" content="Bergen kring 1580, stikk av Hieronymus Scholeus">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Absalon sitt Bergen">
+<meta name="twitter:description" content="Ei vandring gjennom Bergen med dagboka til Absalon Pederssøn Beyer frå 1500-talet.">
+<meta name="twitter:image" content="https://absalon.sneaas.no/bilete/scholeus.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,700;1,400&family=Barlow+Semi+Condensed:wght@600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+/* Blått serviceskilt med svart ⌘ på kvitt felt, slik severdigheitsskilta oftast ser ut langs vegane */
+:root{
+  --sign:#1a5aa6; --sign-ink:#ffffff; --sym:#111820;
+  --paper:#eef1f0; --panel:#e1e6e4; --ink:#1f2528; --muted:#58626a; --rule:#c9d0cd;
+  --focus:#c2410c;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --sign:#2563ad; --paper:#23292c; --panel:#2d3438; --ink:#e9eeec; --muted:#a6b0b5; --rule:#3d464b; --focus:#f59e0b;
+  }
+}
+:root[data-theme="dark"]{--sign:#2563ad; --paper:#23292c; --panel:#2d3438; --ink:#e9eeec; --muted:#a6b0b5; --rule:#3d464b; --focus:#f59e0b}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:1.125rem; line-height:1.5;
+}
+main{max-width:38rem;margin:0 auto;padding:1.25rem 1rem 3rem}
+p{margin:0 0 .9rem}
+.lead{color:var(--muted);font-size:1rem}
+a{color:inherit;text-decoration-color:var(--sign);text-decoration-thickness:2px;text-underline-offset:3px}
+
+/* Skiltet */
+.sign{
+  background:var(--sign); color:var(--sign-ink);
+  border-radius:.45rem; padding:.55rem;
+}
+.sign-in{
+  border:2px solid var(--sign-ink); border-radius:.3rem;
+  padding:.7rem .9rem; display:flex; gap:.8rem; align-items:center;
+}
+.sym{
+  flex:none;display:grid;place-items:center;
+  width:2.6rem;height:2.6rem;background:var(--sign-ink);color:var(--sym);
+  border-radius:.2rem;font-size:1.9rem;line-height:1;
+}
+.sign h1,.sign h2{
+  font-family:"Barlow Semi Condensed","Barlow",sans-serif;font-weight:700;
+  margin:0;line-height:1.05;letter-spacing:.005em;
+}
+.sign h1{font-size:2.4rem}
+.sign h2{font-size:2.1rem}
+.sign .km{margin-left:auto;font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:1.6rem;white-space:nowrap}
+
+h3{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:1.05rem;color:var(--muted);margin:1.7rem 0 .45rem}
+.post-title{font-size:1.5rem;font-weight:700;line-height:1.2;margin:1.1rem 0 .15rem}
+.post-date{color:var(--muted);margin:0 0 1rem}
+
+button{
+  font:inherit;font-weight:700;border:0;background:var(--sign);color:var(--sign-ink);
+  padding:.35rem;border-radius:.45rem;cursor:pointer;width:100%;
+}
+#startBtn > span{display:block;border:2px solid var(--sign-ink);border-radius:.3rem;padding:.65rem 1rem}
+button.ghost{background:transparent;color:var(--ink);border:2px solid var(--rule);padding:.8rem 1rem;font-weight:500}
+button:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+
+#status{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+  background:var(--paper);padding:.5rem 1rem;
+}
+#status .sign{max-width:38rem;margin:0 auto;padding:.35rem}
+#status .sign-in{padding:.45rem .7rem;gap:.6rem}
+#status .sym{width:1.9rem;height:1.9rem;font-size:1.35rem}
+#statusText{font-weight:500;line-height:1.25}
+#dist{margin-left:auto;font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:1.5rem;white-space:nowrap}
+
+.orig{
+  font-family:"EB Garamond",Georgia,serif;font-size:1.3rem;line-height:1.6;
+  border-left:4px solid var(--sign);padding:.2rem 0 .2rem 1rem;margin:0 0 1rem;
+  hyphens:auto;
+}
+.modern{margin-bottom:1rem}
+dl{display:grid;grid-template-columns:auto 1fr;gap:.3rem 1rem;margin:0}
+dt{font-family:"EB Garamond",Georgia,serif;font-size:1.2rem}
+dd{margin:0;color:var(--muted)}
+.task{background:var(--panel);padding:1rem;border-radius:.4rem;margin-top:1.5rem}
+.task .read{font-family:"EB Garamond",Georgia,serif;font-size:1.25rem;line-height:1.55;border-left:4px solid var(--sign);padding:.1rem 0 .1rem .9rem;margin:.8rem 0 0}
+
+.list{list-style:none;padding:0;margin:.4rem 0 0}
+.list li{border-top:1px solid var(--rule)}
+.list li:last-child{border-bottom:1px solid var(--rule)}
+.list button{
+  background:none;color:var(--ink);text-align:left;padding:.75rem 0;border-radius:0;
+  display:flex;gap:.7rem;align-items:baseline;font-weight:500;
+}
+.list .mark{width:1.3rem;flex:none;color:var(--sign);font-weight:700}
+.list .d{margin-left:auto;color:var(--muted);white-space:nowrap;font-weight:400}
+.list .done .name{color:var(--muted)}
+
+.here{font-weight:700}
+.err{font-weight:700}
+.hidden{display:none}
+#mapwrap{margin:1.2rem 0}
+#map{height:320px;border-radius:.4rem;position:relative;z-index:0;background:var(--panel)}
+.pin span{display:grid;place-items:center;width:30px;height:30px;background:#fff;color:#111820;border:3px solid var(--sign);border-radius:4px;font-size:18px;line-height:1;font-weight:700}
+.pin.done span{border-color:#7b8790;color:#4b555c}
+.leaflet-tooltip{font-family:"Barlow",system-ui,sans-serif;font-size:.95rem}
+.accuracy{font-size:.95rem;color:var(--muted)}
+ul.links{padding-left:1.2rem;margin:0}
+ul.links li{margin:.3rem 0}
+figure.hist{margin:0 0 1rem}
+figure.hist img{display:block;width:100%;max-width:100%;height:auto;border-radius:.3rem;background:var(--panel)}
+figure.hist figcaption{font-size:.9rem;color:var(--muted);margin-top:.35rem}
+@media (max-width:380px){.sign h1{font-size:2rem}.sign h2{font-size:1.75rem}}
+</style>
+</head>
+<body>
+
+<div id="status" class="hidden">
+  <div class="sign"><div class="sign-in">
+    <span class="sym" aria-hidden="true">⌘</span>
+    <div id="statusText">Finn posisjon …</div>
+    <div id="dist"></div>
+  </div></div>
+</div>
+
+<main>
+  <section id="intro">
+    <div class="sign"><div class="sign-in"><span class="sym" aria-hidden="true">⌘</span><h1>Absalon sitt Bergen</h1></div></div>
+    <p class="post-date" style="margin-top:.8rem">Ei vandring med dagboka til Absalon Pederssøn Beyer</p>
+    <p>Absalon Pederssøn Beyer (1528–1575) kom frå Aurland, vart teken inn av biskop Geble i Bergen, studerte i København og Wittenberg og vart lektor ved katedralskulen og seinare slottsprest på Bergenhus. Han skreiv dagbok frå 1552 til 1572, og ho er den viktigaste kjelda vi har til korleis det var å leve i Bergen på 1500-talet. Kona hans, Anne Pedersdotter, vart brend som heks i 1590.</p>
+    <p>Absalon fortel òg eit segn om korleis Bergen vart til. Den gongen kong Håkon Adalsteinsfostre heldt til på Alrekstad, gjekk feet og beita der byen står i dag, og folk høyrde lyden av menneske som snakka saman nede i jorda. Kongen trudde det varsla noko vondt, men ein gammal mann sa at det tvert imot tydde at her ein gong skulle byggjast ein by:</p>
+    <p class="orig">vdi sin tid skal der byggis en fiin stad, vdi huilchen skal brugis stor handel oc vandel, som end skier paa denne dag.</p>
+    <p class="lead">Om Norgis Rige, 1567. Les meir om segnet og dei andre variantane av det <a href="https://puha.no/2024/10/23/segn-om-bergens-opphav/" target="_blank" rel="noopener">på Puha</a>.</p>
+    <p>I dag følgjer de han gjennom Bergen, for det meste i 1565, året pesta kom. De kan ta postane i den rekkjefølgja som passar. Sida viser vegen til næraste post de ikkje har vore på, og når de er framme, dukkar teksten opp av seg sjølv.</p>
+    <p class="lead">Les meir: <a href="https://www.bergenbyarkiv.no/oppslagsverket/2003/04/25/absalon-pedersson-beyers-dagbok/" target="_blank" rel="noopener">om dagboka hos Bergen Byarkiv</a> og <a href="https://www.bokselskap.no/boker/absalonsdagbok/1552-2" target="_blank" rel="noopener">heile dagboka hos Bokselskap</a>.</p>
+    <div id="mapwrap"><div id="map" role="region" aria-label="Kart over postane"></div></div>
+    <p><button id="startBtn"><span>Start og vis posisjonen min</span></button></p>
+    <p id="geoErr" class="err hidden"></p>
+    <p class="lead">Telefonen spør om lov til å bruke posisjonen. Posisjonen blir verande på telefonen og blir ikkje sendt nokon stad.</p>
+  </section>
+
+  <section id="post" class="hidden" aria-live="polite"></section>
+
+  <section id="nav" class="hidden">
+    <h3 style="margin-top:2.2rem">Postane</h3>
+    <p class="err" id="navErr"></p>
+    <p class="accuracy" id="acc"></p>
+    <div id="navmap"></div>
+    <ul class="list" id="postList"></ul>
+    <p style="margin-top:1rem"><button class="ghost hidden" id="gpsBtn">Følg GPS igjen</button></p>
+    <p><button class="ghost" id="refreshBtn">Oppdater posisjonen</button></p>
+    <p><button class="ghost" id="introBtn">Tilbake til innleiinga</button></p>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const RADIUS = 50; // meter
+
+const POSTS = [
+{
+  id:"lepra", task:{"kind": "Video", "text": "Film ein av dykk som les bøna til Jon høgt, med hospitalet i bakgrunnen. Rekn med 20–30 sekund.", "read": "O gud kan dett skee dig til ære, och mig til gaffn, da lad mig aldrig komme i then Spital, paa det at mine fattige smaa børn icke skulle høre ille oc lide spot for mig."}, links:[["St. Jørgens hospital", "https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/1423009"], ["Lepramuseet", "https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/1422038"], ["Sjukehus i Bergen – om «Spitalen»", "https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/1424747"]], name:"Lepramuseet", lat:60.391654, lon:5.332922,
+  title:"Jordmora og sonen",
+  intro:"Elsebe var jordmor i Bergen og hadde teke imot alle sju borna til Absalon. Ho døydde i januar 1565. To månader seinare vart sonen hennar, Jon, dømd til å flytte inn på St. Jørgens hospital, som folk kalla «Spitalen». Hospitalet har lege her sidan 1400-talet, men bygningane de ser, vart reiste etter bybrannen i 1702.",
+  orig:"Paa thenne same dag døde Jon Elzebe messemagers søn, (…) som var spilt, oc tildømder paa raadhusit att hand skulde giffue sig ind i Spitalen, Ther hand hafde nu beskicket sit hwss och bedet sine venner godenetter fulde hans hustrw Genitte hannom paa weyen, och som de komme lit fraa theris gaard ind paa alle helgens kirkegaard, tha badt hand til gud sigendis, O gud kan dett skee dig til ære, och mig til gaffn, da lad mig aldrig komme i then Spital, paa det at mine fattige smaa børn icke skulle høre ille oc lide spot for mig, der hand dette bad, oc hans hustrw holt honnom vnder armene, bønhørde gud hannom och hand seeg sagtmodelig mod iorden och døde, siden vart hand boren i sin gaardt och førdt til kirkegaarden och begrauen then xx Martij.",
+  modern:"Same dagen døydde Jon, son til Elsebe Knivsmed. Han var spedalsk og dømd på rådhuset til å gå inn på hospitalet. Då han hadde ordna med huset sitt og sagt farvel til venene sine, følgde kona hans, Genitte, han på vegen. Då dei var komne eit lite stykke frå garden sin og inn på Allehelgens kyrkjegard, bad han til Gud: «Å Gud, kan det skje deg til ære og meg til gagn, så lat meg aldri kome på det hospitalet, så mine fattige små born ikkje skal høyre vondt og lide spott for mi skuld.» Medan han bad dette og kona heldt han under armane, bønhøyrde Gud han, og han seig stilleleg mot jorda og døydde. Sidan vart han boren heim til garden sin, førd til kyrkjegarden og gravlagd 20. mars.",
+  date:"19. mars 1565",
+  gloss:[["skee","skje"],["gaffn","gagn"],["Spital","hospital"],["spot","spott, hån"],["seeg","seig"],["iorden","jorda"]]
+},
+{
+  id:"dom", task:{"kind": "Bilete", "text": "Domkyrkja er med på Scholeus-prospektet frå kring 1580. Samanlikn kyrkja med teikninga, finn den vinkelen der ho liknar mest, og ta eit bilete. Ta så eitt bilete opp mot fjellsida bak kyrkja, der steinane kom frå."}, links:[["Domkirken","https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/1424599"],["Latinskolen","https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/1425037"]], img:["Scoleus.jpg","scholeus.jpg", "Bergen kring 1580, stikk av Hieronymus Scholeus. Domkyrkja står lengst til høgre. Trykk for større bilete."], name:"Domkyrkja", lat:60.393841, lon:5.330910,
+  title:"Steinane som fall",
+  intro:"Domkyrkja var kyrkja til Absalon, og latinskulen der han var lærar, låg like ved. Sjå opp i fjellsida bak kyrkja.",
+  orig:"Paa denne dag prædigede ieg Absalon til høgmesse i Domkircken, oc som it korter aff en time effter predigen var begynt falt aff det bratte bierg offuer Skolen store stene vd, Jeg straffede fast den forsømelse som forelderne her i byen haue med deris børns optuchtelse oc frychte at gud vilde straffe Bergen diluuio non vndarum sed montium impendentium oppido.",
+  modern:"Denne dagen preika eg, Absalon, i høgmessa i Domkyrkja, og då det hadde gått eit kvarter av preika, fall det store steinar ned frå det bratte berget over skulen. Eg refsa hardt den forsømminga foreldra her i byen syner i oppsedinga av borna sine, og frykta at Gud ville straffe Bergen med ein flaum, ikkje av bølgjer, men av fjella som heng over byen.",
+  date:"30. desember 1565",
+  gloss:[["it korter aff en time","eit kvarter"],["bierg","berg"],["offuer","over"],["straffede fast","refsa hardt"],["optuchtelse","oppseding"],["diluuio …","latin: med ein flaum, ikkje av bølgjer, men av fjella som heng over byen"]]
+},
+{
+  id:"torget", task:{"kind": "Bilete", "text": "Bygningane her er nye, men noko har halde seg sidan 1565. Ta eit bilete som viser at dette framleis er ein stad for hamn og handel."}, img:["Scoleus Martinskirken.jpg","martinskirken.jpg", "Martinskyrkja, «S. Morten» hos Absalon, på Scholeus-prospektet kring 1580."], name:"Torget", lat:60.394738, lon:5.325177,
+  title:"Pesta kjem til byen",
+  intro:"Hausten 1565 kom pesta til Bergen med skip. Absalon førte opp lik dag for dag. Ein dag i september vart det gravlagt fem i Domkyrkja, seks i Korskyrkja og åtte i dei tyske kyrkjene.",
+  orig:"Vdi dette aar førte en Bremmer skiber som kom fra Dansken hid til Bergen pestelentze med sig skiberen styremanden oc den meste partt aff baasmenderne døde, En baasmand gaff en vng karll en brog, oc han bodde i Jon Ellingsøns gaardt hand bleff befengt aff henne och døde, der nest faderen oc en hel hob andre, saa at 17 personer ere døde aff den gaard. (…) Døde oc en Skreddere paa torgit ved naffn Dirick huilcken mand kallede Suulten Dirick for hanss kargheds oc Girigheds skyldt, (…) Vart hand begraffuen paa Domkirckegarden, och iij andre lig med honnom, hand døde aff pestelentze.",
+  modern:"Dette året kom ein skipper frå Bremen, som hadde vore i Danzig, hit til Bergen med pest om bord. Skipperen, styrmannen og dei fleste av sjøfolka døydde. Ein sjømann gav ein ung kar ei bukse. Han budde i Jon Ellingsøns gard, vart smitta av buksa og døydde, deretter faren og ei heil mengd andre, så 17 personar frå den garden er døde. (…) Det døydde òg ein skreddar på Torget som heitte Dirick, som folk kalla Sulten-Dirick fordi han var så gjerrig og grådig. (…) Han vart gravlagd på Domkyrkjegarden saman med tre andre lik. Han døydde av pest.",
+  date:"september 1565",
+  gloss:[["Bremmer skiber","skipper frå Bremen"],["Dansken","Danzig (Gdańsk)"],["pestelentze","pest"],["baasmand","båtsmann, sjømann"],["brog","bukse"],["befengt","smitta"]]
+},
+{
+  id:"brann", task:{"kind": "Video", "text": "Ingenting frå 1561 står att her. Film ein av dykk som les byrjinga på brannskildringa høgt, med Vågen og Strandsida i biletet.", "read": "Paa den nittende dag vdi december maanid 1561 som var fredagen fore jul, da klocken var ved siw oc folkit var vdi kircke, oc predigen var begynt da ringde de Stormeklocken, løb da folkit vdaf kirken."}, img:["Scoleus Mariakirken.jpg","mariakirken.jpg", "Mariakyrkja, Vårfrukyrkja, der mora til jenta sat og høyrde preika. Utsnitt av Scholeus-prospektet kring 1580."], links:[["Branner i Bergen", "https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/14355328"], ["Det gamle rådhuset", "https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/1425133"]], name:"Strandkaien", lat:60.394681, lon:5.322956,
+  title:"Brannen fredag før jul",
+  intro:"Denne historia er frå 1561, fire år før pesta. Brannen byrja i eit hus på Strandsida, og Absalon skreiv etterpå opp kvar einaste gard som brann – over sytti – slik at etterkomarane skulle forstå kor stor skaden var, gjere bot og be Gud om å sleppe slik eldsvåde. Brannen stoppa ved steinmuren i Smørsgarden, og folk reiv taka av husa på Munkebryggen for å redde resten av Strandsida og Bryggen. Garden til Erik Rosenkrantz var blant dei som brann, og etterpå bygde han seg hus i stein – Muren, som står ved Murallmenningen enno. Storbrannar som denne er grunnen til at byen fekk breie allmenningar som brannhinder, mellom anna Torgallmenningen.",
+  orig:"Paa den nittende dag vdi december maanid 1561 som var fredagen fore jul, da klocken var ved siw oc folkit var vdi kircke, oc predigen var begynt da ringde de Stormeklocken, løb da folkit vdaf kirken, da saag Mand at der var ild vdi her Nilsis hus paa Wos som stod paa strand annen gaarden vdenfore Raadstuuen nest messemageren. Ilden begyntes vdi saa maade, der bode en bødker af bremen vdi forne hus, hand var icke hieme, quinnen var ij Vorfroe kirke at høre predigen, Deris dotter som kunde vere xiij eller xiiij aar gammell var hieme, oc giorde ild vdi gruffuen, at gøre sig varm øl oc brød, hafde hun saa tagit it fange bøkerspøne, oc lagd dennom paa en retterbenck som stod op til skorstenen, der sprank en gnist aff gruuen vdi spønerne, der aff tendes ilden op, Men der pigen hafde giort ilden op, løb hun til kopperslageren Oc da hun kom tilbage igen, oc lod dørren op, slo lugen vd imod pigen, da løb hun ned vdi boden och robte tuenne bødkerkarle op, som skulde hielpe at slycke ilden, da var det alt forseent, fordi ilden var kommen vdi en hob spøner som laag paa lemmen.",
+  modern:"Den nittande dagen i desember 1561, som var fredagen før jul, då klokka var sju, folk var i kyrkja og preika hadde byrja, ringde dei med stormklokka. Folk sprang ut av kyrkja og såg at det brann i huset til herr Nils på Voss, som stod på Stranda, den andre garden utanfor rådstua, ved sida av knivsmeden. Brannen byrja slik: I huset budde ein bøkkar frå Bremen. Han var ikkje heime, og kona var i Vårfrukyrkja og høyrde preika. Dottera deira, som kunne vere 13 eller 14 år, var heime og gjorde opp eld i grua for å lage seg varmt øl og brød. Ho hadde teke eit fang bøkkarspon og lagt dei på ein benk som stod inntil skorsteinen. Ein gnist frå grua spratt over i sponet, og der tok elden til. Men då jenta hadde gjort opp elden, sprang ho til koparslagaren. Då ho kom tilbake og opna døra, slo logen ut mot henne. Då sprang ho ned i bua og ropte opp to bøkkarkarar som skulle hjelpe til å sløkkje, men då var det altfor seint, for elden hadde nådd ein haug med spon som låg på lemmen.",
+  date:"19. desember 1561",
+  gloss:[["Stormeklocken","stormklokka, brannklokka"],["bødker","bøkkar, tønnemakar"],["Vorfroe kirke","Vårfrukyrkja"],["gruffuen","grua, eldstaden"],["bøkerspøne","bøkkarspon"],["retterbenck","benk"],["tendes","tende seg, tok fyr"]]
+},
+{
+  id:"nykirken", task:{"kind": "Video", "text": "Av erkebispegarden er berre murrestar under kyrkja att. Film ein av dykk som les domen høgt, med kyrkja i bakgrunnen.", "read": "Bleffue de fangere dømde. om huilke før er screffuit fraa liffuitt paa lagtingit som stod paa Erchebiskopsgaarden."}, links:[["Erkebispegården", "https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/1427117"], ["Nykirken", "https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/1425101"], ["Digital rekonstruksjon av erkebispegarden (UiB)", "https://www.uib.no/middelalderklynge/178819/et-nytt-sted-i-bergen-anno-1320-er-p%C3%A5-plass-erkebispeg%C3%A5rden-i-bergen"]], name:"Nykirken", lat:60.397109, lon:5.313371,
+  title:"Dømde på lagtinget",
+  intro:"Her låg erkebispegarden, delvis der Nykirken står i dag. Etter reformasjonen vart han brukt av mellom anna lagtinget. I juni 1565 stod fangane frå tårnet på Bergenhus for retten her. Har de vore på Bergenhus alt, veit de kven dei er.",
+  orig:"Bleffue de fangere dømde. om huilke før er screffuit fraa liffuitt paa lagtingit som stod paa Erchebiskopsgaarden, ere de icke straxtt retted, men Erik Rosenkrans sigis haue K. Maiestat tilscreuit huad hand schal gøre med them, thi side de och bide effter gunst eller vrede.",
+  modern:"Fangane som det er skrive om før, vart dømde frå livet på lagtinget som vart halde i erkebispegarden. Dei vart ikkje avretta straks, men Erik Rosenkrantz skal ha skrive til kongen og spurt kva han skal gjere med dei. Så no sit dei og ventar på nåde eller vreide.",
+  date:"18. juni 1565",
+  gloss:[["fangere","fangar"],["fraa liffuitt","frå livet, til døden"],["retted","avretta"],["K. Maiestat","kongen"],["side","sit"],["bide effter","ventar på"],["gunst","nåde"]]
+},
+{
+  id:"bryggen", task:{"kind": "Bilete", "text": "Gardane er bygde opp att etter brannen i 1702, men dei trange smauga mellom dei er som før. Finn eitt og ta eit bilete. Det var mellom to gardar som desse tyskaren vart funnen ståande på hovudet."}, img:["Scoleus (cropped) Bryggen.jpg","bryggen.jpg", "Bryggen kring 1580, utsnitt av Scholeus-prospektet."], name:"Bryggen", lat:60.397567, lon:5.324549,
+  title:"Ulukka i Gullskoen",
+  intro:"På Bryggen budde og arbeidde dei tyske kjøpmennene. Absalon kalla dei «garpar», eit litt nedlatande ord. Gullskoen var ein av gardane her.",
+  orig:"Vart en garpedreng dog voxen ved bryggen skruffuit ihiel oc gick det saa thill, Der skruuede Nogle vnge karle paa een skruffue vdi Guldskuren, en part stod for en karl stod bag som døde, der de nu best skruuede, brast tuged sønder, ssom skruuestocken var satt wthi, saa røg then karll thil bage som bag stod, och de andre som fremmen stod, røge paa hannom med stoch och all machtt, saa att hans brøst brast sønder och der aff fich hand sitt bannesaar. Wdi then forleden wge sigis en garp vedt bryggen vere funden mellom tho garpegaarde standendis paa hoffuedit.",
+  modern:"Ein tysk kjøpmannsgut, men vaksen, vart klemt i hel av ein vinsj ved Bryggen, og det gjekk slik til: Nokre unge karar dreiv ein vinsj i Gullskoen. Nokre stod framme, og ein kar, han som døydde, stod bak. Medan dei dreiv på som best, røyk tauet som vinsjestokken sat i. Då rauk han som stod bak, bakover, og dei som stod framme, rauk over han med stokken og all kraft, så brystet hans knakk, og av det fekk han banesåret. Førre veka skal ein tyskar ved Bryggen ha vorte funnen ståande på hovudet mellom to tyske gardar.",
+  date:"13. august 1565",
+  gloss:[["skruffue","vinsj"],["tuged","tauet"],["brast sønder","røyk, gjekk i stykke"],["røg","rauk"],["machtt","makt, kraft"],["bannesaar","banesår"]]
+},
+{
+  id:"bergenhus", task:{"kind": "Bilete", "text": "Håkonshallen og tårnet står heilt til venstre på Scholeus-prospektet. Finn ein vinkel som liknar, og ta eit bilete. Kva er likt, og kva har endra seg? Tips: Når hallen vart restaurert, kopierte arkitektane trappegavlane frå nettopp dette stikket. Tårnet er òg i hovudsak ført tilbake til slik det såg ut på slutten av 1500-talet."}, img:["Scoleus.jpg","scholeus.jpg", "Bergen kring 1580. Bergenhus med Håkonshallen og tårnet ligg heilt til venstre. Trykk for større bilete."], links:[["Bergenhus festning", "https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/1424494"], ["Rosenkrantztårnet", "https://www.bergenbyarkiv.no/bergenbyleksikon/arkiv/1425132"]], name:"Bergenhus", lat:60.399039, lon:5.318298,
+  title:"Rømmingsplanen i tårnet",
+  intro:"Absalon var òg slottsprest her. I januar 1565 skriv han om den store galeien som vart bygd framfor slottet – noko slikt hadde aldri vore i Noreg. Han skulle skrive kor lang ho var, men setninga stoppar midt i. I juni sat nokre fangar i tårnet på slottet og la ein plan.",
+  orig:"Wore nogle fanger indsat i tornit paa slottit, blant huilke var først en Suensk Hans Garp, som var fangen med Claudio Gallo, huilken som ihielskød Erik Rosenkrantzis foged paa Romsdall, jtem haffde Erick Munck tagit en aff de Suenske till sig ved naffn Peder skreddere denne var indsatt for nogen wlydighed han beuiste sin hosbonde, oc en ved naffn Hans kleensmedtt, en dansk, oc en tysk smed tiente Erick Munk kommen fraa de Suenske, Denne danske Hans smed jemrede sig storligen att hand skulde saa fengslis gred och gaff sig ille, Tha sagde Hans garp til hannom, mig forundrer attu est saa wtolmodig i det dw hauer en stacked tid verit her inne, huad skulde ieg giøre i det ieg haffuer saa lenge verit her inne, meere end it heeltt aar, hand suaredt att hand kunde icke lide saadant fengsell oc meente der hand kunde komme wdt da vilde hand gøre der til huad hand kunde, da swared forne Hans Garp, at ther som de vilde lyde hannom at oc gøre alle it, da vilde han vel hielpe dem oc sig vd medt, de besuore sig alle tilsamen, da viste hand dem en stor graasten aff griot, huilken en baasmand med itt jern tilforen hafde vdhullit oc vilde krybe ther igennom oc vndkomme, tha lagde de saa offuer att de vilde drage til Erik Munkis gaardt oc tage der vaaben och werie, siden ville de sette ild vdi Byen, i nogle stæder, oc meden att folked skulde slycke ilden vilde de rømme heden, Per Skreddere Erik Munckis tienere sagde, min hosbonde pleie att legge sin dagger paa Bordet, ieg vil gaa til pigen som ligger vdi Swalen i slapbencken oc faa nøgelen fraa henne gaa saa ind til hannom oc stinge hannom dødt. Der dette altsamen wart beslutted, aabenbarede forne Hans kleensmedt som først vaar aarsage til denne handel for nogle aff Suennene huilke hand bad sige Lauritz scriffuere at saadan anslag war for hande, Tha gaff Lauritz E: Rosenkrans det tilkende, huilken om natten lod holde vagt paa hester vden for slottedt, oc som en af dem var vdi hullit och vilde vdt, oc saag sig om da begynte een aff Suenen vden faare atth krempte, saa gaffue de dem ind igen, dog var hullit ey saa vit, att de kunde komme vdtt, Om morgen der effter, vart tornit beskudt, Siden haffde E: Rosenkrans sagen for sig och hørde alles tiltal och genswar.",
+  modern:"Nokre fangar var sette inn i tårnet på slottet. Mellom dei var først ein svenske, Hans Garp, som vart teken saman med Claudius Gallus, han som skaut fogden til Erik Rosenkrantz i Romsdal i hel. Erik Munk hadde òg teke til seg ein av svenskane, Peder Skreddar, og han var sett inn for ulydnad mot husbonden sin. Så var det ein som heitte Hans Klensmed, ein dansk, og ein tysk smed som tente Erik Munk og hadde kome frå svenskane. Den danske smeden Hans jamra seg storleg over å vere fengsla, gret og bar seg ille. Då sa Hans Garp til han: «Det undrar meg at du er så utolmodig når du berre har vore her inne ei lita stund. Kva skulle så eg gjere, som har vore her inne så lenge, meir enn eit heilt år?» Smeden svara at han ikkje tolte slikt fengsel, og at om han kunne kome ut, ville han gjere kva han kunne for det. Då svara Hans Garp at om dei ville lyde han og gjere alt i lag, skulle han nok hjelpe både dei og seg sjølv ut. Alle sverja seg saman. Då viste han dei ein stor gråstein i muren som ein sjømann før hadde hola ut med eit jern, for å krype gjennom og sleppe unna. Så la dei plan om å gå til garden til Erik Munk og ta våpen og verje der, deretter setje fyr på byen fleire stader, og medan folk sløkte, ville dei rømme herifrå. Per Skreddar, tenaren til Erik Munk, sa: «Husbonden min pleier å leggje dolken sin på bordet. Eg vil gå til jenta som ligg på slagbenken i svalgangen og få nøkkelen av henne, og så gå inn til han og stikke han i hel.» Då alt dette var avtalt, var det nettopp Hans Klensmed, som hadde vore årsaka til heile saka, som avslørte det for nokre av svennene. Han bad dei seie til Lauritz skrivar at ein slik plan var på gang. Lauritz sa frå til Erik Rosenkrantz, som om natta lét halde vakt med hestar utanfor slottet. Då ein av fangane var i holet og ville ut og såg seg om, tok ein av svennene utanfor til å kremte, så dei kraup inn att. Holet var uansett ikkje vidt nok til at dei kunne kome ut. Morgonen etter vart tårnet granska, og sidan tok Rosenkrantz saka føre seg og høyrde kva alle hadde å seie og svare.",
+  date:"5. juni 1565",
+  gloss:[["graasten aff griot","gråstein, stein i muren"],["vdhullit","hola ut"],["vndkomme","sleppe unna"],["vaaben och werie","våpen og verje"],["slycke","sløkkje"],["rømme heden","rømme herifrå"],["krempte","kremta"],["Suennene","svennene, tenarane på slottet"],["Swalen","svalgangen"],["beskudt","granska (usikkert)"]]
+}
+];
+
+
+let pos = null, acc = null, watchId = null, manual = null, geoError = null;
+let arrivedAt = null; // posten vi sist kom innanfor radiusen til, null når vi er utanfor alle
+const visited = new Set(loadVisited());
+
+function loadVisited(){ try{ return JSON.parse(localStorage.getItem("absalon-visited")||"[]"); }catch(e){ return []; } }
+function saveVisited(){ try{ localStorage.setItem("absalon-visited", JSON.stringify([...visited])); }catch(e){} }
+
+function dist(a,b,c,d){
+  const R=6371000, r=Math.PI/180;
+  const dLat=(c-a)*r, dLon=(d-b)*r;
+  const x=Math.sin(dLat/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(x));
+}
+function bearing(a,b,c,d){
+  const r=Math.PI/180;
+  const y=Math.sin((d-b)*r)*Math.cos(c*r);
+  const x=Math.cos(a*r)*Math.sin(c*r)-Math.sin(a*r)*Math.cos(c*r)*Math.cos((d-b)*r);
+  const deg=(Math.atan2(y,x)/r+360)%360;
+  return ["nord","nordaust","aust","søraust","sør","sørvest","vest","nordvest"][Math.round(deg/45)%8];
+}
+function fmt(m){ return m<1000 ? Math.round(m/10)*10+" m" : (m/1000).toFixed(1).replace(".",",")+" km"; }
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function figure(img){
+  // img = [filnamn på Commons, lokalt filnamn i bilete/, biletekst]
+  const f = encodeURIComponent(img[0].replace(/ /g,"_"));
+  return `<figure class="hist"><a href="https://commons.wikimedia.org/wiki/File:${f}" target="_blank" rel="noopener"><img src="bilete/${img[1]}" alt="${esc(img[2])}" loading="lazy" onerror="this.closest('figure').remove()"></a><figcaption>${esc(img[2])} Wikimedia Commons, fri bruk.</figcaption></figure>`;
+}
+
+let map = null, markers = {}, meDot = null, meRing = null;
+function pinIcon(p){
+  const done = visited.has(p.id);
+  return L.divIcon({className:"pin"+(done?" done":""), html:`<span>${done?"✓":"⌘"}</span>`, iconSize:[30,30], iconAnchor:[15,15]});
+}
+function initMap(){
+  if(!window.L){ $("mapwrap").remove(); return; }
+  map = L.map("map",{scrollWheelZoom:false});
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
+    maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-bidragsytarar'
+  }).addTo(map);
+  for(const p of POSTS){
+    markers[p.id] = L.marker([p.lat,p.lon],{icon:pinIcon(p), title:p.name, keyboard:true})
+      .addTo(map).bindTooltip(p.name,{direction:"top",offset:[0,-14]})
+      .on("click",()=>{ if(!$("nav").classList.contains("hidden")){ manual=p.id; update(); window.scrollTo(0,0); } });
+  }
+  map.fitBounds(L.latLngBounds(POSTS.map(p=>[p.lat,p.lon])),{padding:[24,24]});
+}
+function placeMap(inNav){
+  const w = $("mapwrap"); if(!w || !map) return;
+  const target = inNav ? $("navmap") : $("intro");
+  if(inNav && w.parentNode!==target) target.appendChild(w);
+  if(!inNav && w.parentNode!==target) $("intro").insertBefore(w, $("startBtn").parentNode);
+  setTimeout(()=>map.invalidateSize(),0);
+}
+function updateMap(){
+  if(!map) return;
+  for(const p of POSTS) markers[p.id].setIcon(pinIcon(p));
+  if(pos){
+    const ll=[pos.lat,pos.lon];
+    if(!meDot){
+      meRing = L.circle(ll,{radius:acc||30,color:"#1a5aa6",weight:1,fillOpacity:.12,interactive:false}).addTo(map);
+      meDot = L.circleMarker(ll,{radius:7,color:"#fff",weight:3,fillColor:"#1a5aa6",fillOpacity:1,interactive:false}).addTo(map).bindTooltip("Du er her");
+    } else { meDot.setLatLng(ll); meRing.setLatLng(ll).setRadius(acc||30); }
+  }
+}
+function renderPost(p){
+  const el=$("post");
+  el.innerHTML = `
+    <div class="sign"><div class="sign-in"><span class="sym" aria-hidden="true">⌘</span><h2>${esc(p.name)}</h2></div></div>
+    <p class="post-title">${esc(p.title)}</p>
+    <p class="post-date">${esc(p.date)}</p>
+    ${p.img ? figure(p.img) : ""}
+    <p>${esc(p.intro)}</p>
+    <h3>Absalon skriv</h3>
+    <p class="orig">${esc(p.orig)}</p>
+    <h3>På moderne nynorsk</h3>
+    <p class="modern">${esc(p.modern)}</p>
+    <h3>Ordliste</h3>
+    <dl>${p.gloss.map(g=>`<dt>${esc(g[0])}</dt><dd>${esc(g[1])}</dd>`).join("")}</dl>
+    <div class="task"><strong>Oppgåve: ${esc(p.task.kind.toLowerCase())}</strong><br>${esc(p.task.text)}${p.task.read ? `<p class="read">${esc(p.task.read)}</p>` : ""}</div>
+    ${p.links ? `<h3>Les meir i Bergen byleksikon</h3><ul class="links">${p.links.map(l=>`<li><a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])}</a></li>`).join("")}</ul>` : ""}`;
+  el.classList.remove("hidden");
+}
+
+function nearest(){
+  if(!pos) return null;
+  let best=null;
+  for(const p of POSTS){
+    const d=dist(pos.lat,pos.lon,p.lat,p.lon);
+    if(!best||d<best.d) best={p,d};
+  }
+  return best;
+}
+function nextTarget(){
+  const left = POSTS.filter(p=>!visited.has(p.id));
+  const pool = left.length ? left : POSTS;
+  if(!pos) return pool[0];
+  return pool.reduce((a,b)=> dist(pos.lat,pos.lon,a.lat,a.lon) <= dist(pos.lat,pos.lon,b.lat,b.lon) ? a : b);
+}
+
+function update(){
+  $("status").classList.remove("hidden");
+  $("nav").classList.remove("hidden");
+  $("intro").classList.add("hidden");
+  placeMap(true);
+
+  const n = nearest();
+  let showing = null;
+
+  // Byt berre automatisk når vi kjem inn til ein ny post, ikkje så lenge vi står ved same post
+  let inside = (n && n.d <= RADIUS) ? n.p.id : null;
+  // Litt slingringsmonn ut att, så GPS-støy ved kanten ikkje tel som ny ankomst
+  if(!inside && arrivedAt && pos){
+    const a = POSTS.find(p=>p.id===arrivedAt);
+    if(dist(pos.lat,pos.lon,a.lat,a.lon) <= RADIUS*1.5) inside = arrivedAt;
+  }
+  if(inside !== arrivedAt){
+    arrivedAt = inside;
+    if(inside) manual = null;
+  }
+  $("gpsBtn").classList.toggle("hidden", !manual || !pos);
+
+  if(manual){
+    showing = POSTS.find(p=>p.id===manual);
+  } else if(n && n.d <= RADIUS){
+    showing = n.p;
+    if(!visited.has(showing.id)){ visited.add(showing.id); saveVisited(); }
+  }
+
+  $("status").classList.toggle("hidden", !!showing);
+  if(showing){
+    renderPost(showing);
+    $("statusText").innerHTML = manual && !(n && n.d<=RADIUS && n.p.id===manual)
+      ? `Viser ${esc(showing.name)}` : `<span class="here">Du er ved ${esc(showing.name)}</span>`;
+    $("dist").textContent = "";
+  } else {
+    $("post").classList.add("hidden");
+    const t = nextTarget();
+    if(pos){
+      const d=dist(pos.lat,pos.lon,t.lat,t.lon);
+      $("statusText").textContent = `Gå mot ${t.name}, ${bearing(pos.lat,pos.lon,t.lat,t.lon)}`;
+      $("dist").textContent = fmt(d);
+    } else {
+      $("statusText").innerHTML = geoError ? `<span class="err">${esc(geoError)}</span>` : "Finn posisjon …";
+      $("dist").textContent = "";
+    }
+  }
+
+  $("navErr").textContent = (geoError && !pos) ? geoError : "";
+  $("acc").textContent = acc ? `GPS-nøyaktigheit: om lag ${Math.round(acc)} m` : "";
+  $("postList").innerHTML = POSTS.map(p=>{
+    const d = pos ? fmt(dist(pos.lat,pos.lon,p.lat,p.lon)) : "";
+    return `<li class="${visited.has(p.id)?"done":""}"><button data-id="${p.id}"><span class="mark">${visited.has(p.id)?"✓":"⌘"}</span><span class="name">${esc(p.name)}</span><span class="d">${d}</span></button></li>`;
+  }).join("");
+  updateMap();
+}
+
+function onPos(p){ geoError=null; pos={lat:p.coords.latitude, lon:p.coords.longitude}; acc=p.coords.accuracy; update(); }
+function onErr(e){
+  const msg = e.code===1
+    ? "Posisjon er slått av for denne sida. Slå det på i innstillingane til nettlesaren, eller vel post i lista."
+    : e.code===3
+      ? "Fekk ikkje posisjon innan 20 sekund. Gå ut i ope lende og vent litt, eller vel post i lista."
+      : "Telefonen fann ikkje posisjonen. Sjekk at stadtenester er slått på, eller vel post i lista.";
+  showErr(msg); update();
+}
+const GEO_OPTS = {enableHighAccuracy:true, maximumAge:5000, timeout:20000};
+function startWatch(){
+  if(watchId!==null) navigator.geolocation.clearWatch(watchId);
+  watchId = navigator.geolocation.watchPosition(onPos, onErr, GEO_OPTS);
+}
+// Nokre telefonar stoppar posisjonsoppdateringane når skjermen har vore låst
+document.addEventListener("visibilitychange", ()=>{
+  if(document.visibilityState==="visible" && watchId!==null) startWatch();
+});
+function startGeo(){
+  geoError = null;
+  if(!window.isSecureContext){
+    showErr("Sida må opnast med https:// for at posisjonen skal virke. Vel post i lista i staden.");
+    update(); return;
+  }
+  if(!("geolocation" in navigator)){
+    showErr("Denne nettlesaren kan ikkje gi posisjon. Vel post i lista i staden.");
+    update(); return;
+  }
+  startWatch();
+  update();
+}
+function showErr(m){ geoError = m; }
+
+$("startBtn").addEventListener("click", startGeo);
+initMap();
+$("introBtn").addEventListener("click", ()=>{
+  $("intro").classList.remove("hidden"); $("post").classList.add("hidden");
+  $("nav").classList.add("hidden"); $("status").classList.add("hidden");
+  manual=null; placeMap(false); window.scrollTo(0,0);
+});
+$("refreshBtn").addEventListener("click", ()=>{
+  if(!("geolocation" in navigator)) return;
+  $("refreshBtn").textContent = "Hentar posisjon …";
+  navigator.geolocation.getCurrentPosition(
+    p=>{ $("refreshBtn").textContent="Oppdater posisjonen"; onPos(p); },
+    e=>{ $("refreshBtn").textContent="Oppdater posisjonen"; onErr(e); },
+    {enableHighAccuracy:true, maximumAge:0, timeout:20000});
+  startWatch();
+});
+$("gpsBtn").addEventListener("click", ()=>{ manual=null; arrivedAt=null; update(); window.scrollTo(0,0); });
+$("postList").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  manual=b.dataset.id; update(); window.scrollTo(0,0);
+});
+</script>
+</body>
+</html>
